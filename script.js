@@ -14,6 +14,7 @@ function say(text) {
 
 // ---- click to meow ----
 cat.addEventListener("click", () => {
+  if (dragged) return;   
   cat.classList.add("meow");
   say(phrases[Math.floor(Math.random() * phrases.length)]);
   setTimeout(() => cat.classList.remove("meow"), 600);
@@ -51,3 +52,39 @@ cat.addEventListener("mousemove", (e) => {
 cat.addEventListener("mouseleave", () => {
   petAmount = 0;
 });
+
+// ---- dragging ----
+// ---- dragging ----
+let pressed = null;    // where the mouse went down (null = not pressed)
+let dragged = false;   // did it actually move, or was it just a click?
+
+function endDrag() {
+  if (!pressed) return;
+  pressed = null;
+  window.pet.dragEnd();
+}
+
+cat.addEventListener("pointerdown", (e) => {
+  pressed = { x: e.screenX, y: e.screenY };
+  dragged = false;
+  cat.setPointerCapture(e.pointerId);
+  window.pet.dragStart(e.screenX, e.screenY);
+});
+
+cat.addEventListener("pointermove", (e) => {
+  if (!pressed) return;
+  if (e.buttons === 0) {        // button isn't actually down: we missed the release
+    endDrag();
+    return;
+  }
+  const moved = Math.abs(e.screenX - pressed.x) + Math.abs(e.screenY - pressed.y);
+  if (moved > 4) dragged = true;
+  if (dragged) window.pet.dragMove(e.screenX, e.screenY);
+});
+
+// any of these means "the drag is over"
+cat.addEventListener("pointerup", endDrag);
+cat.addEventListener("pointercancel", endDrag);
+cat.addEventListener("lostpointercapture", endDrag);
+  
+    
