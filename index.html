@@ -6,7 +6,6 @@
       margin: 0; height: 100%;
       background: transparent;
       overflow: hidden;
-      -webkit-app-region: drag;
     }
     #cat { width: 180px; display: block; margin: 0 auto; overflow: visible; }
 
@@ -17,8 +16,28 @@
     @keyframes breathe { 0%,100% { transform: scale(1,1); } 50% { transform: scale(1.02,.98); } }
     @keyframes sway    { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(10deg); } }
     @keyframes blink   { 0%,94%,100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
+    .meow .om { display: inline; }
+    .meow #mouth { display: none; }
+    body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;   /* stack bubble + cat at the bottom of the window */
+}
+#bubble {
+  background: #fff;
+  color: #3E2614;
+  border: 2px solid #3E2614;
+  border-radius: 12px;
+  padding: 3px 10px;
+  font: 13px -apple-system, sans-serif;
+  opacity: 0;
+  transition: opacity 0.2s;    /* fade in and out instead of popping */
+}
+#bubble.show { opacity: 1; }
   </style>
 </head>
+<div id="bubble"></div>
 <body>
 <svg id="cat" viewBox="0 0 200 256" xmlns="http://www.w3.org/2000/svg">
   <style>.hx,.zx,.om{display:none}</style>
@@ -93,5 +112,23 @@
     <path d="M100 143 v4" stroke="#3E2614" stroke-width="2" stroke-linecap="round"/>
   </g>
 </svg>
+<script>
+  const cat = document.getElementById("cat");
+  const bubble = document.getElementById("bubble");
+const phrases = ["meow!", "mrrp!", "feed me", "hi hi"];
+let bubbleTimer;
+
+function say(text) {
+  bubble.textContent = text;
+  bubble.classList.add("show");
+  clearTimeout(bubbleTimer);
+  bubbleTimer = setTimeout(() => bubble.classList.remove("show"), 1500);
+}
+  cat.addEventListener("click", () => {
+    cat.classList.add("meow");
+    say(phrases[Math.floor(Math.random() * phrases.length)]);
+    setTimeout(() => cat.classList.remove("meow"), 600);
+  });
+</script>
 </body>
 </html>
