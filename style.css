@@ -1,0 +1,67 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;   /* stack bubble + cat at the bottom of the window */
+}
+
+#cat { width: 180px; display: block; margin: 0 auto; overflow: visible; }
+
+/* idle animations */
+#all  { transform-origin: 100px 248px; animation: breathe 3s ease-in-out infinite; }
+#tail { transform-origin: 96px 246px;  animation: sway 2.4s ease-in-out infinite; }
+#eyes { transform-box: fill-box; transform-origin: center; animation: blink 4.5s infinite; }
+
+@keyframes breathe { 0%,100% { transform: scale(1,1); } 50% { transform: scale(1.02,.98); } }
+@keyframes sway    { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(10deg); } }
+@keyframes blink   { 0%,94%,100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
+
+/* meow face */
+.meow .om { display: inline; }
+.meow #mouth { display: none; }
+
+/* speech bubble */
+#bubble {
+  background: #fff;
+  color: #3E2614;
+  border: 2px solid #3E2614;
+  border-radius: 12px;
+  padding: 3px 10px;
+  font: 13px -apple-system, sans-serif;
+  opacity: 0;
+  transition: opacity 0.2s;    /* fade in and out instead of popping */
+}
+#bubble.show { opacity: 1; }
+
+/* happy face: hide the normal eyes, show the ^^ eyes */
+.happy #look { display: none; }
+.happy .hx { display: inline; }
+
+/* purring: a tiny fast side-to-side wiggle */
+.happy #all { animation: purr 0.12s linear infinite; }
+@keyframes purr {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(1.2px); }
+}
+
+/* floating hearts */
+.heart {
+  position: absolute;
+  bottom: 210px;
+  color: #D4537E;
+  font-size: 18px;
+  pointer-events: none;   /* so hearts don't block your mouse */
+  animation: floatUp 1.2s ease-out forwards;
+}
+@keyframes floatUp {
+  0%   { opacity: 0; transform: translate(-50%, 0); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50px); }
+}
